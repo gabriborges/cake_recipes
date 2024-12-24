@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:cake_recipes/routes/routes.dart';
 
 class FloatingNavigationBar extends StatelessWidget {
+  final int currentIndex;
+
+  FloatingNavigationBar({required this.currentIndex});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -22,10 +28,27 @@ class FloatingNavigationBar extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0),
           child: BottomNavigationBar(
+            currentIndex: currentIndex,
             fixedColor: Colors.black,
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: false,
             showUnselectedLabels: false,
+            onTap: (index) {
+              switch (index) {
+                case 0:
+                  Get.offNamed(RoutesDesktop.homePage);
+                  break;
+                case 1:
+                  Get.offNamed(RoutesDesktop.searchPage);
+                  break;
+                case 2:
+                  Get.offNamed(RoutesDesktop.favoritePage);
+                  break;
+                case 3:
+                  Get.offNamed(RoutesDesktop.profilePage);
+                  break;
+              }
+            },
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
