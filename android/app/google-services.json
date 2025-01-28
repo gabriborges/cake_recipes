@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "742506963129",
-    "project_id": "cake-recipes-bd17b",
-    "storage_bucket": "cake-recipes-bd17b.firebasestorage.app"
+    "project_number": "799488698971",
+    "project_id": "cake-recipes-1b081",
+    "storage_bucket": "cake-recipes-1b081.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:742506963129:android:dafba3cbaae4c4ea4a7b68",
+        "mobilesdk_app_id": "1:799488698971:android:6dbd9bfa69fd99d032ed7e",
         "android_client_info": {
           "package_name": "com.example.cake_recipes"
         }
@@ -15,7 +15,6 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB2N_d44a_JjAFCidmsr5DVzvXbHylGewo"
         }
       ],
       "services": {

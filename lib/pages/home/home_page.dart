@@ -13,6 +13,24 @@ class HomePage extends StatelessWidget {
     await Auth().signOut();
   }
 
+  Widget _title() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        // 'Olá, ${user!.displayName}',
+        'Olá, Ryan Gosling',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _signOutButton() {
+    return ElevatedButton(onPressed: signOut, child: const Text('Sair'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
