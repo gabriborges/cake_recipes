@@ -7,30 +7,6 @@ import 'package:cake_recipes/auth.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  final User? user = Auth().currentUser;
-
-  Future<void> signOut() async {
-    await Auth().signOut();
-  }
-
-  Widget _title() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(
-        // 'Olá, ${user!.displayName}',
-        'Olá, Ryan Gosling',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _signOutButton() {
-    return ElevatedButton(onPressed: signOut, child: const Text('Sair'));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,6 @@
 import 'package:cake_recipes/pages/home/home_page.dart';
 import 'package:cake_recipes/pages/login/login_register_page.dart';
+import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cake_recipes/routes/routes.dart';
@@ -13,10 +14,16 @@ class WidgetTree extends StatefulWidget {
 
 class _WidgetTreeState extends State<WidgetTree> {
   @override
+  void initState() {
+    super.initState();
+    Get.put(ProfileController()); // Register the ProfileController here
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<User?>(
       stream: Auth().authStateChanges,
-      builder: (context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
