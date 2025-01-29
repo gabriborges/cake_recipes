@@ -1,7 +1,8 @@
-import 'dart:io';
-
+import 'package:cake_recipes/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cake_recipes/pages/create_recipe/controller/create_recipe_controller.dart';
 
 class CreateRecipePage extends StatefulWidget {
   @override
@@ -15,15 +16,10 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   final _ingredientsController = TextEditingController();
   final _preparationController = TextEditingController();
   final _additionalInfoController = TextEditingController();
-  XFile? _image;
-
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = image;
-    });
-  }
+  final _imageLinkController = TextEditingController();
+  final _readingTimeController = TextEditingController();
+  final CreateRecipeController _createRecipeController =
+      Get.put(CreateRecipeController());
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +35,15 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: _image == null
-                      ? Container(
-                          height: 200,
-                          width: double.infinity,
-                          color: Colors.grey[200],
-                          child: Icon(Icons.add_a_photo, size: 50),
-                        )
-                      : Image.file(File(_image!.path), height: 200),
+                TextFormField(
+                  controller: _imageLinkController,
+                  decoration: InputDecoration(labelText: 'Link da Imagem'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o link da imagem';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -70,6 +65,19 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Por favor, insira o tempo de preparo';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  controller: _readingTimeController,
+                  decoration:
+                      InputDecoration(labelText: 'Tempo de Leitura (minutos)'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o tempo de leitura';
                     }
                     return null;
                   },
@@ -105,33 +113,51 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   maxLines: 3,
                 ),
                 SizedBox(height: 16),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Criar',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white,
+                GestureDetector(
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      User? user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        String authorId = user.uid;
+                        String authorName = user.displayName ?? 'Anonymous';
+                        await _createRecipeController.createRecipe(
+                          authorId: authorId,
+                          authorName: authorName,
+                          cookingTimeMin:
+                              int.parse(_cookingTimeController.text),
+                          imageLink: _imageLinkController.text,
+                          ingredients: _ingredientsController.text,
+                          moreInfo: _additionalInfoController.text,
+                          preparationMethod: _preparationController.text,
+                          readingTime: int.parse(_readingTimeController.text),
+                          title: _titleController.text,
+                        );
+                        Get.toNamed(RoutesDesktop.homePage);
+                      } else {
+                        Get.snackbar('Error',
+                            'Você precisa estar logado para criar uma receita',
+                            snackPosition: SnackPosition.BOTTOM);
+                      }
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Criar',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                )
-                // Center(
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       if (_formKey.currentState!.validate()) {
-                //
-                //       }
-                //     },
-                //     child: Text('Criar'),
-                //   ),
-                // ),
+                ),
               ],
             ),
           ),

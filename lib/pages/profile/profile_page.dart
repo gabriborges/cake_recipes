@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              Padding(
+              SingleChildScrollView(
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,8 +36,8 @@ class ProfilePage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage: NetworkImage(
-                              'https://m.media-amazon.com/images/M/MV5BMTQzMjkwNTQ2OF5BMl5BanBnXkFtZTgwNTQ4MTQ4MTE@._V1_.jpg'),
+                          backgroundImage:
+                              NetworkImage(_profileController.userPic.value),
                         ),
                         SizedBox(width: 20),
                         Column(
@@ -241,7 +241,8 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),

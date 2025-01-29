@@ -7,6 +7,7 @@ class ProfileController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   var userName = ''.obs;
+  var userPic = ''.obs;
   var userAge = 0.obs;
   var userRating = 0.0.obs;
   var userRecipes = 0.obs;
@@ -31,7 +32,7 @@ class ProfileController extends GetxController {
       } else {
         // Load user data
         userName.value = userDoc['name'];
-        userAge.value = userDoc['age'];
+        userPic.value = userDoc['profile_pic'];
         userRating.value = userDoc['rating'];
         userRecipes.value = userDoc['recipes'];
         userReviews.value = userDoc['reviews'];
@@ -40,7 +41,7 @@ class ProfileController extends GetxController {
       }
     } else {
       // Handle user not logged in
-      Get.offNamed('/loginRegisterPage');
+      // Get.offNamed('/loginRegisterPage');
     }
   }
 
@@ -49,10 +50,12 @@ class ProfileController extends GetxController {
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).set({
         'name': name,
-        'rating': 4.9, // Default rating
-        'recipes': 3, // Default number of recipes
-        'reviews': 947, // Default number of reviews
-        'views': 10000, // Default number of views
+        'profile_pic':
+            'https://upload.wikimedia.org/wikipedia/commons/8/83/Default-Icon.jpg',
+        'rating': 0.0,
+        'recipes': 0,
+        'reviews': 0,
+        'views': 0,
       });
       userName.value = name;
 
