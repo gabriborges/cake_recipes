@@ -1,3 +1,4 @@
+import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:cake_recipes/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
   final _readingTimeController = TextEditingController();
   final CreateRecipeController _createRecipeController =
       Get.put(CreateRecipeController());
+  final ProfileController _profileController = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +65,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       InputDecoration(labelText: 'Tempo de Preparo (minutos)'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o tempo de preparo';
+                    if (value == null ||
+                        value.isEmpty ||
+                        int.tryParse(value) == null ||
+                        int.parse(value) <= 0) {
+                      return 'Por favor, insira um tempo de preparo válido';
                     }
                     return null;
                   },
@@ -76,8 +81,11 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       InputDecoration(labelText: 'Tempo de Leitura (minutos)'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o tempo de leitura';
+                    if (value == null ||
+                        value.isEmpty ||
+                        int.tryParse(value) == null ||
+                        int.parse(value) <= 0) {
+                      return 'Por favor, insira um tempo de leitura válido';
                     }
                     return null;
                   },
@@ -117,12 +125,12 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       User? user = FirebaseAuth.instance.currentUser;
+                      await _profileController.getUserName();
                       if (user != null) {
                         String authorId = user.uid;
-                        String authorName = user.displayName ?? 'Anonymous';
                         await _createRecipeController.createRecipe(
                           authorId: authorId,
-                          authorName: authorName,
+                          authorName: _profileController.userName.value,
                           cookingTimeMin:
                               int.parse(_cookingTimeController.text),
                           imageLink: _imageLinkController.text,
@@ -143,7 +151,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color: Colors.red,
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Center(

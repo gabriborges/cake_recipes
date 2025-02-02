@@ -1,5 +1,6 @@
 import 'package:cake_recipes/auth.dart';
 import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
+import 'package:cake_recipes/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   Future<void> signOut() async {
     await Auth().signOut();
+    Get.toNamed(RoutesDesktop.loginRegisterPage);
   }
 
   @override

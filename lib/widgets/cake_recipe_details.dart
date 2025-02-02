@@ -10,6 +10,7 @@ class CakeRecipeDetails extends StatelessWidget {
   final bool isFavorite;
   final String ingredients;
   final String preparation;
+  final String moreInfo;
 
   CakeRecipeDetails({
     required this.imageUrl,
@@ -20,6 +21,7 @@ class CakeRecipeDetails extends StatelessWidget {
     this.isFavorite = false,
     required this.ingredients,
     required this.preparation,
+    required this.moreInfo,
   });
 
   @override
@@ -41,6 +43,14 @@ class CakeRecipeDetails extends StatelessWidget {
                   height: 250,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://static.vecteezy.com/ti/vetor-gratis/p1/13149674-icone-de-imagem-indisponivel-em-moderno-estilo-plano-isolado-no-fundo-branco-simbolo-da-galeria-de-fotos-para-aplicativos-web-e-moveis-gratis-vetor.jpg',
+                      height: 250,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 16),
@@ -63,7 +73,6 @@ class CakeRecipeDetails extends StatelessWidget {
                         ),
                 ],
               ),
-              SizedBox(height: 8),
               Text(
                 'por $author',
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
@@ -74,11 +83,11 @@ class CakeRecipeDetails extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Symbols.schedule, size: 14, color: Colors.grey[600]),
+                      Icon(Symbols.schedule, size: 20, color: Colors.black),
                       SizedBox(width: 4.0),
                       Text(
                         '$readingTime min de leitura',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(fontSize: 17, color: Colors.black),
                       ),
                     ],
                   ),
@@ -116,6 +125,25 @@ class CakeRecipeDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
                 softWrap: true,
               ),
+              SizedBox(height: 16),
+              moreInfo != ''
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mais Informações',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          moreInfo,
+                          style: TextStyle(fontSize: 16),
+                          softWrap: true,
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),

@@ -13,6 +13,7 @@ class ProfileController extends GetxController {
   var userRecipes = 0.obs;
   var userReviews = 0.obs;
   var userViews = 0.obs;
+  var userProfilePicture = ''.obs;
   var isLoading = true.obs;
 
   @override
@@ -37,11 +38,23 @@ class ProfileController extends GetxController {
         userRecipes.value = userDoc['recipes'];
         userReviews.value = userDoc['reviews'];
         userViews.value = userDoc['views'];
+        userProfilePicture.value = userDoc['profile_pic'];
         isLoading.value = false;
       }
     } else {
       // Handle user not logged in
       // Get.offNamed('/loginRegisterPage');
+      print('User not logged in...');
+      // Get.offNamed('/loginRegisterPage');
+    }
+  }
+
+  Future<void> getUserName() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+      userName.value = userDoc['name'];
     }
   }
 
