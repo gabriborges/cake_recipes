@@ -16,9 +16,11 @@ class RecipesController extends GetxController {
     try {
       isLoading(true);
       QuerySnapshot snapshot = await _firestore.collection('recipes').get();
-      recipes.value = snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      recipes.value = snapshot.docs.map((doc) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch recipes: $e',
           snackPosition: SnackPosition.BOTTOM);

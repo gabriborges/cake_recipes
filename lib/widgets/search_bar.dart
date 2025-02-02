@@ -21,7 +21,7 @@ class SearchBar extends StatelessWidget {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.grey[200],
+          fillColor: Colors.red, // Changed color here
         ),
       ),
     );

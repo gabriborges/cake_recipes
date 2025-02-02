@@ -98,16 +98,6 @@ class CakeCard extends StatelessWidget {
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Spacer(),
-                      isFavorite
-                          ? Icon(
-                              Symbols.favorite,
-                              color: Colors.red,
-                              fill: 1.0,
-                            )
-                          : Icon(
-                              Symbols.favorite,
-                              color: Colors.black,
-                            ),
                     ],
                   ),
                   SizedBox(height: 4.0),

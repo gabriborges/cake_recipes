@@ -34,7 +34,7 @@ class ProfileController extends GetxController {
         // Load user data
         userName.value = userDoc['name'];
         userPic.value = userDoc['profile_pic'];
-        userRating.value = userDoc['rating'];
+        userRating.value = (userDoc['rating'] as num).toDouble();
         userRecipes.value = userDoc['recipes'];
         userReviews.value = userDoc['reviews'];
         userViews.value = userDoc['views'];
@@ -69,6 +69,7 @@ class ProfileController extends GetxController {
         'recipes': 0,
         'reviews': 0,
         'views': 0,
+        'favorite_recipes': [],
       });
       userName.value = name;
 

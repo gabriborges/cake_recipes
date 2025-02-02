@@ -16,7 +16,7 @@ class CreateRecipeController extends GetxController {
     required String title,
   }) async {
     try {
-      await _firestore.collection('recipes').add({
+      DocumentReference docRef = await _firestore.collection('recipes').add({
         'author_id': authorId,
         'author_name': authorName,
         'cooking_time_min': cookingTimeMin,
@@ -28,6 +28,9 @@ class CreateRecipeController extends GetxController {
         'title': title,
         'createdAt': FieldValue.serverTimestamp(),
       });
+
+      await docRef.update({'id': docRef.id});
+
       Get.snackbar('Success', 'Receita criada com sucesso!',
           snackPosition: SnackPosition.BOTTOM);
     } catch (e) {

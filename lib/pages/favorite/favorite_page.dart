@@ -1,8 +1,12 @@
 import 'package:cake_recipes/widgets/cake_card.dart';
 import 'package:cake_recipes/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
 
 class FavoritePage extends StatelessWidget {
+  final FavoriteController _favoriteController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,24 +35,48 @@ class FavoritePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    CakeCard(
-                      imageUrl:
-                          'https://thescranline.com/wp-content/uploads/2023/06/BLACK-FOREST-CAKE-S-01.jpg',
-                      title: 'Floresta Negra',
-                      author: 'Ryan Gosling',
-                      readingTime: 5,
-                      cookingTime: 45,
-                      isFavorite: true,
-                    ),
-                    Container(
-                      height: 90,
-                    ),
-                  ],
-                ),
+                Obx(() {
+                  if (_favoriteController.favoriteRecipes.isEmpty) {
+                    return Center(child: Text('Nenhuma receita favorita'));
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _favoriteController.favoriteRecipes.length,
+                    itemBuilder: (context, index) {
+                      String recipeId =
+                          _favoriteController.favoriteRecipes[index];
+                      return FutureBuilder<Map<String, dynamic>?>(
+                        future:
+                            _favoriteController.fetchRecipeDetails(recipeId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasError || !snapshot.hasData) {
+                            return Center(
+                                child: Text('Erro ao carregar receita'));
+                          }
+                          var recipe = snapshot.data!;
+                          return CakeCard(
+                            imageUrl: recipe['image_link'],
+                            title: recipe['title'],
+                            author: recipe['author_name'],
+                            readingTime: recipe['reading_time_min'],
+                            cookingTime: recipe['cooking_time_min'],
+                            isFavorite: true,
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              '/recipePage',
+                              arguments: recipe,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),

@@ -17,6 +17,7 @@ class RecipePage extends StatelessWidget {
       ingredients: recipe['ingredients'] ?? '',
       preparation: recipe['preparation_method'] ?? '',
       moreInfo: recipe['more_info'] ?? '',
+      recipeId: recipe['id'],
     );
   }
 }

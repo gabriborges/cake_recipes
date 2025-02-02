@@ -1,3 +1,4 @@
+import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
 import 'package:cake_recipes/pages/home/controller/recipes_controller.dart';
 import 'package:cake_recipes/widgets/cake_card.dart';
 import 'package:cake_recipes/widgets/floating_navigation_bar.dart';
@@ -8,7 +9,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   final RecipesController _recipesController = Get.put(RecipesController());
-
+  final FavoriteController _favoriteController = Get.put(FavoriteController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
 
 class CakeRecipeDetails extends StatelessWidget {
   final String imageUrl;
@@ -11,6 +13,7 @@ class CakeRecipeDetails extends StatelessWidget {
   final String ingredients;
   final String preparation;
   final String moreInfo;
+  final String recipeId;
 
   CakeRecipeDetails({
     required this.imageUrl,
@@ -22,7 +25,10 @@ class CakeRecipeDetails extends StatelessWidget {
     required this.ingredients,
     required this.preparation,
     required this.moreInfo,
+    required this.recipeId,
   });
+
+  final FavoriteController _favoriteController = Get.find<FavoriteController>();
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +67,19 @@ class CakeRecipeDetails extends StatelessWidget {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
-                  isFavorite
-                      ? Icon(
-                          Symbols.favorite,
-                          color: Colors.red,
-                          fill: 1.0,
-                        )
-                      : Icon(
-                          Symbols.favorite,
-                          color: Colors.black,
-                        ),
+                  Obx(() {
+                    bool isFavorite = _favoriteController.isFavorite(recipeId);
+                    return IconButton(
+                      icon: Icon(
+                        isFavorite ? Symbols.favorite : Symbols.favorite_border,
+                        color: isFavorite ? Colors.red : Colors.black,
+                        fill: isFavorite ? 1 : 0,
+                      ),
+                      onPressed: () {
+                        _favoriteController.toggleFavoriteStatus(recipeId);
+                      },
+                    );
+                  }),
                 ],
               ),
               Text(
