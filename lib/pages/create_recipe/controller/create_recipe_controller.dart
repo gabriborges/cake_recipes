@@ -26,10 +26,19 @@ class CreateRecipeController extends GetxController {
         'preparation_method': preparationMethod,
         'reading_time_min': readingTime,
         'title': title,
+        'rating': 0,
+        'stars_list': {},
+        'views': 0,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
       await docRef.update({'id': docRef.id});
+
+      DocumentReference userDocRef =
+          _firestore.collection('users').doc(authorId);
+      await userDocRef.update({
+        'recipes': FieldValue.arrayUnion([docRef.id])
+      });
 
       Get.snackbar('Success', 'Receita criada com sucesso!',
           snackPosition: SnackPosition.BOTTOM);

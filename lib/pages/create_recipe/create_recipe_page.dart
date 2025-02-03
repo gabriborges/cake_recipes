@@ -1,5 +1,4 @@
 import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
-import 'package:cake_recipes/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,11 +64,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       InputDecoration(labelText: 'Tempo de Preparo (minutos)'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        int.tryParse(value) == null ||
-                        int.parse(value) <= 0) {
-                      return 'Por favor, insira um tempo de preparo válido';
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o tempo de preparo';
                     }
                     return null;
                   },
@@ -81,11 +77,8 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                       InputDecoration(labelText: 'Tempo de Leitura (minutos)'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        int.tryParse(value) == null ||
-                        int.parse(value) <= 0) {
-                      return 'Por favor, insira um tempo de leitura válido';
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o tempo de leitura';
                     }
                     return null;
                   },
@@ -125,7 +118,6 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       User? user = FirebaseAuth.instance.currentUser;
-                      await _profileController.getUserName();
                       if (user != null) {
                         String authorId = user.uid;
                         await _createRecipeController.createRecipe(
@@ -140,10 +132,9 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                           readingTime: int.parse(_readingTimeController.text),
                           title: _titleController.text,
                         );
-                        Get.toNamed(RoutesDesktop.homePage);
+                        Get.offAllNamed('/homePage');
                       } else {
-                        Get.snackbar('Error',
-                            'Você precisa estar logado para criar uma receita',
+                        Get.snackbar('Error', 'User not logged in',
                             snackPosition: SnackPosition.BOTTOM);
                       }
                     }
@@ -151,7 +142,7 @@ class _CreateRecipePageState extends State<CreateRecipePage> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.red[400],
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: Center(

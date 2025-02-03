@@ -66,6 +66,8 @@ class FavoritePage extends StatelessWidget {
                             readingTime: recipe['reading_time_min'],
                             cookingTime: recipe['cooking_time_min'],
                             isFavorite: true,
+                            rating: recipe['rating'].toDouble(),
+                            views: recipe['views'],
                             onTap: () => Navigator.pushNamed(
                               context,
                               '/recipePage',

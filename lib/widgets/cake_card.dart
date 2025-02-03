@@ -8,6 +8,8 @@ class CakeCard extends StatelessWidget {
   final int readingTime;
   final int cookingTime;
   final bool isFavorite;
+  final double rating;
+  final int views;
   final VoidCallback? onTap;
 
   CakeCard({
@@ -17,6 +19,8 @@ class CakeCard extends StatelessWidget {
     required this.readingTime,
     required this.cookingTime,
     this.isFavorite = false,
+    required this.rating,
+    required this.views,
     this.onTap,
   });
 
@@ -64,10 +68,47 @@ class CakeCard extends StatelessWidget {
                   top: 8.0,
                   right: 8.0,
                   child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            rating.toString(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 1.0),
+                          Icon(
+                            size: 10,
+                            Symbols.star,
+                            color: Colors.yellow[700],
+                            fill: 1,
+                          ),
+                        ],
+                      )),
+                ),
+                Positioned(
+                  bottom: 8.0,
+                  right: 8.0,
+                  child: Container(
                     padding: EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      shape: BoxShape.circle,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10.0),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black26,
@@ -76,10 +117,19 @@ class CakeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      size: 15,
-                      Symbols.share,
-                      color: Colors.black,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Symbols.visibility,
+                          size: 10,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width: 4.0),
+                        Text(
+                          views.toString(),
+                          style: TextStyle(fontSize: 10, color: Colors.black),
+                        ),
+                      ],
                     ),
                   ),
                 ),

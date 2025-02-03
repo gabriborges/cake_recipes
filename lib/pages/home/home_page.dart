@@ -1,5 +1,6 @@
 import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
 import 'package:cake_recipes/pages/home/controller/recipes_controller.dart';
+import 'package:cake_recipes/routes/routes.dart';
 import 'package:cake_recipes/widgets/cake_card.dart';
 import 'package:cake_recipes/widgets/floating_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,11 @@ class HomePage extends StatelessWidget {
 
   final RecipesController _recipesController = Get.put(RecipesController());
   final FavoriteController _favoriteController = Get.put(FavoriteController());
+
+  Future<void> _refreshRecipes() async {
+    await _recipesController.fetchRecipes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,53 +32,65 @@ class HomePage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Pesquisar',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
+          RefreshIndicator(
+            onRefresh: _refreshRecipes,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RoutesDesktop.searchPage);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Pesquisar',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                        ),
+                        readOnly: true, // Make the TextField read-only
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
                     ),
                   ),
-                ),
-                Obx(() {
-                  if (_recipesController.isLoading.value) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _recipesController.recipes.length,
-                    itemBuilder: (context, index) {
-                      var recipe = _recipesController.recipes[index];
-                      return CakeCard(
-                        imageUrl: recipe['image_link'],
-                        title: recipe['title'],
-                        author: recipe['author_name'],
-                        readingTime: recipe['reading_time_min'],
-                        cookingTime: recipe['cooking_time_min'],
-                        isFavorite: false,
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/recipePage',
-                          arguments: recipe,
-                        ),
-                      );
-                    },
-                  );
-                }),
-                SizedBox(height: 80),
-              ],
+                  Obx(() {
+                    if (_recipesController.isLoading.value) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _recipesController.recipes.length,
+                      itemBuilder: (context, index) {
+                        var recipe = _recipesController.recipes[index];
+                        return CakeCard(
+                          imageUrl: recipe['image_link'],
+                          title: recipe['title'],
+                          author: recipe['author_name'],
+                          readingTime: recipe['reading_time_min'],
+                          cookingTime: recipe['cooking_time_min'],
+                          rating: recipe['rating'].toDouble(),
+                          views: recipe['views'],
+                          isFavorite: false,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            '/recipePage',
+                            arguments: recipe,
+                          ),
+                        );
+                      },
+                    );
+                  }),
+                  SizedBox(height: 80),
+                ],
+              ),
             ),
           ),
           FloatingNavigationBar(currentIndex: 0),

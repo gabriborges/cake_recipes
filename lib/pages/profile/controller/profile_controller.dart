@@ -35,10 +35,12 @@ class ProfileController extends GetxController {
         userName.value = userDoc['name'];
         userPic.value = userDoc['profile_pic'];
         userRating.value = (userDoc['rating'] as num).toDouble();
-        userRecipes.value = userDoc['recipes'];
+        userRecipes.value = userDoc['recipes'].length;
         userReviews.value = userDoc['reviews'];
         userViews.value = userDoc['views'];
         userProfilePicture.value = userDoc['profile_pic'];
+        updateUserReviews(userDoc['recipes']);
+        updateUserRating(userDoc['recipes']);
         isLoading.value = false;
       }
     } else {
@@ -46,6 +48,28 @@ class ProfileController extends GetxController {
       // Get.offNamed('/loginRegisterPage');
       print('User not logged in...');
       // Get.offNamed('/loginRegisterPage');
+    }
+  }
+
+  Future<void> updateUserReviews(List<dynamic> recipeIds) async {
+    int totalReviews = 0;
+    print('Recipe IDs: $recipeIds');
+    for (String recipeId in recipeIds) {
+      print('Recipe ID: $recipeId');
+      DocumentSnapshot recipeDoc =
+          await _firestore.collection('recipes').doc(recipeId).get();
+      if (recipeDoc.exists) {
+        Map<String, dynamic> starsMap =
+            Map<String, dynamic>.from(recipeDoc['stars_list']);
+        totalReviews += starsMap.length;
+      }
+    }
+    userReviews.value = totalReviews;
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'reviews': totalReviews,
+      });
     }
   }
 
@@ -75,6 +99,32 @@ class ProfileController extends GetxController {
 
       // Navigate to profile page
       Get.offNamed('/profilePage');
+    }
+  }
+
+  Future<void> updateUserRating(List<dynamic> recipeIds) async {
+    double totalRating = 0.0;
+    int ratedRecipesCount = 0;
+
+    for (String recipeId in recipeIds) {
+      DocumentSnapshot recipeDoc =
+          await _firestore.collection('recipes').doc(recipeId).get();
+      if (recipeDoc.exists) {
+        double recipeRating = (recipeDoc['rating'] as num).toDouble();
+        totalRating += recipeRating;
+        ratedRecipesCount++;
+      }
+    }
+
+    double averageRating =
+        ratedRecipesCount > 0 ? totalRating / ratedRecipesCount : 0.0;
+    userRating.value = averageRating;
+
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'rating': averageRating,
+      });
     }
   }
 }

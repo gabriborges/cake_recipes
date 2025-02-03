@@ -28,4 +28,17 @@ class RecipesController extends GetxController {
       isLoading(false);
     }
   }
+
+  Future<void> incrementViews(String recipeId) async {
+    try {
+      DocumentReference recipeDoc =
+          _firestore.collection('recipes').doc(recipeId);
+      await recipeDoc.update({
+        'views': FieldValue.increment(1),
+      });
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to increment views: $e',
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
 }
