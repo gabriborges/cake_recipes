@@ -57,8 +57,8 @@ class FavoriteController extends GetxController {
         favoriteRecipes.value = List<String>.from(favorites);
       }
     } else {
-      Get.snackbar('Error', 'Você precisa estar logado para ver favoritos',
-          snackPosition: SnackPosition.BOTTOM);
+      // Get.snackbar('Error', 'Você precisa estar logado para ver favoritos',
+      //     snackPosition: SnackPosition.BOTTOM);
     }
   }
 

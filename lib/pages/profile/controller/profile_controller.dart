@@ -31,7 +31,6 @@ class ProfileController extends GetxController {
         // Navigate to update profile page if user does not exist in Firestore
         Get.offNamed('/updateProfilePage');
       } else {
-        // Load user data
         userName.value = userDoc['name'];
         userPic.value = userDoc['profile_pic'];
         userRating.value = (userDoc['rating'] as num).toDouble();
@@ -39,12 +38,12 @@ class ProfileController extends GetxController {
         userReviews.value = userDoc['reviews'];
         userViews.value = userDoc['views'];
         userProfilePicture.value = userDoc['profile_pic'];
-        updateUserReviews(userDoc['recipes']);
-        updateUserRating(userDoc['recipes']);
+        await updateUserReviews(userDoc['recipes']);
+        await updateUserRating(userDoc['recipes']);
+        await updateUserViews(userDoc['recipes']);
         isLoading.value = false;
       }
     } else {
-      // Handle user not logged in
       // Get.offNamed('/loginRegisterPage');
       print('User not logged in...');
       // Get.offNamed('/loginRegisterPage');
@@ -53,9 +52,7 @@ class ProfileController extends GetxController {
 
   Future<void> updateUserReviews(List<dynamic> recipeIds) async {
     int totalReviews = 0;
-    print('Recipe IDs: $recipeIds');
     for (String recipeId in recipeIds) {
-      print('Recipe ID: $recipeId');
       DocumentSnapshot recipeDoc =
           await _firestore.collection('recipes').doc(recipeId).get();
       if (recipeDoc.exists) {
@@ -70,35 +67,6 @@ class ProfileController extends GetxController {
       await _firestore.collection('users').doc(user.uid).update({
         'reviews': totalReviews,
       });
-    }
-  }
-
-  Future<void> getUserName() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      DocumentSnapshot userDoc =
-          await _firestore.collection('users').doc(user.uid).get();
-      userName.value = userDoc['name'];
-    }
-  }
-
-  Future<void> updateUserProfile(String name) async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).set({
-        'name': name,
-        'profile_pic':
-            'https://upload.wikimedia.org/wikipedia/commons/8/83/Default-Icon.jpg',
-        'rating': 0.0,
-        'recipes': 0,
-        'reviews': 0,
-        'views': 0,
-        'favorite_recipes': [],
-      });
-      userName.value = name;
-
-      // Navigate to profile page
-      Get.offNamed('/profilePage');
     }
   }
 
@@ -125,6 +93,56 @@ class ProfileController extends GetxController {
       await _firestore.collection('users').doc(user.uid).update({
         'rating': averageRating,
       });
+    }
+  }
+
+  Future<void> updateUserViews(List<dynamic> recipeIds) async {
+    int totalViews = 0;
+
+    for (String recipeId in recipeIds) {
+      DocumentSnapshot recipeDoc =
+          await _firestore.collection('recipes').doc(recipeId).get();
+      if (recipeDoc.exists) {
+        int recipeViews = recipeDoc['views'];
+        totalViews += recipeViews;
+      }
+    }
+
+    userViews.value = totalViews;
+
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'views': totalViews,
+      });
+    }
+  }
+
+  Future<void> getUserName() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(user.uid).get();
+      userName.value = userDoc['name'];
+    }
+  }
+
+  Future<void> updateUserProfile(String name) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set({
+        'name': name,
+        'profile_pic':
+            'https://upload.wikimedia.org/wikipedia/commons/8/83/Default-Icon.jpg',
+        'rating': 0.0,
+        'recipes': [],
+        'reviews': 0,
+        'views': 0,
+        'favorite_recipes': [],
+      });
+      userName.value = name;
+
+      Get.offNamed('/homePage');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateRecipeController extends GetxController {
@@ -26,6 +27,8 @@ class CreateRecipeController extends GetxController {
         'preparation_method': preparationMethod,
         'reading_time_min': readingTime,
         'title': title,
+        'search_title':
+            title.toLowerCase().split(' ').map((word) => word.trim()).toList(),
         'rating': 0,
         'stars_list': {},
         'views': 0,
@@ -41,7 +44,7 @@ class CreateRecipeController extends GetxController {
       });
 
       Get.snackbar('Success', 'Receita criada com sucesso!',
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green);
     } catch (e) {
       Get.snackbar('Error', 'Falha ao criar receita: $e',
           snackPosition: SnackPosition.BOTTOM);

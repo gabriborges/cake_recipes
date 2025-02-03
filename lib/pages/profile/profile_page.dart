@@ -1,10 +1,10 @@
 import 'package:cake_recipes/auth.dart';
 import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
-import 'package:cake_recipes/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cake_recipes/widgets/floating_navigation_bar.dart';
+import 'package:restart_app/restart_app.dart';
 
 class ProfilePage extends StatelessWidget {
   final ProfileController _profileController = Get.find();
@@ -12,7 +12,8 @@ class ProfilePage extends StatelessWidget {
 
   Future<void> signOut() async {
     await Auth().signOut();
-    Get.toNamed(RoutesDesktop.loginRegisterPage);
+    // Get.delete<ProfileController>();
+    Restart.restartApp();
   }
 
   @override
@@ -38,8 +39,8 @@ class ProfilePage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              NetworkImage(_profileController.userPic.value),
+                          backgroundImage: NetworkImage(
+                              'https://m.media-amazon.com/images/M/MV5BMTQzMjkwNTQ2OF5BMl5BanBnXkFtZTgwNTQ4MTQ4MTE@._V1_.jpg'),
                         ),
                         SizedBox(width: 20),
                         Column(
@@ -95,6 +96,7 @@ class ProfilePage extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Obx(() => Text(
                                         _profileController.userRating.value
+                                            .toStringAsFixed(2)
                                             .toString(),
                                         style: TextStyle(
                                           fontSize: 20,
@@ -243,8 +245,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 50),
+                    )
                   ],
                 ),
               ),

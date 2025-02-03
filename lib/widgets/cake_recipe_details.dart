@@ -112,7 +112,7 @@ class CakeRecipeDetails extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              rating.toString(),
+                              rating.toStringAsFixed(1).toString(),
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,8 @@ class RecipesController extends GetxController {
   void onInit() {
     super.onInit();
     fetchRecipes();
+    ProfileController profileController = Get.find<ProfileController>();
+    profileController.checkUserProfile();
   }
 
   Future<void> fetchRecipes() async {

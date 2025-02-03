@@ -1,9 +1,10 @@
+import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
+import 'package:cake_recipes/pages/home/controller/recipes_controller.dart';
 import 'package:cake_recipes/pages/home/home_page.dart';
 import 'package:cake_recipes/pages/login/login_register_page.dart';
 import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cake_recipes/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cake_recipes/auth.dart';
 
@@ -16,7 +17,9 @@ class _WidgetTreeState extends State<WidgetTree> {
   @override
   void initState() {
     super.initState();
-    Get.put(ProfileController()); // Register the ProfileController here
+    Get.put(ProfileController());
+    Get.put(FavoriteController());
+    Get.put(RecipesController());
   }
 
   @override

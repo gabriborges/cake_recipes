@@ -1,5 +1,6 @@
 import 'package:cake_recipes/pages/favorite/controller/favorite_controller.dart';
 import 'package:cake_recipes/pages/home/controller/recipes_controller.dart';
+import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:cake_recipes/routes/routes.dart';
 import 'package:cake_recipes/widgets/cake_card.dart';
 import 'package:cake_recipes/widgets/floating_navigation_bar.dart';
@@ -9,8 +10,7 @@ import 'package:get/get.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  final RecipesController _recipesController = Get.put(RecipesController());
-  final FavoriteController _favoriteController = Get.put(FavoriteController());
+  final RecipesController _recipesController = Get.find();
 
   Future<void> _refreshRecipes() async {
     await _recipesController.fetchRecipes();
@@ -39,30 +39,44 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(RoutesDesktop.searchPage);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Pesquisar',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Get.offNamed(RoutesDesktop.searchPage);
+                        print('Search');
+                      },
+                      child: IgnorePointer(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Pesquisar',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[200],
                           ),
-                          filled: true,
-                          fillColor: Colors.grey[200],
+                          readOnly: true,
                         ),
-                        readOnly: true, // Make the TextField read-only
                       ),
                     ),
                   ),
                   Obx(() {
                     if (_recipesController.isLoading.value) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(),
+                            ],
+                          ),
+                        ),
+                      );
                     }
                     return ListView.builder(
                       shrinkWrap: true,

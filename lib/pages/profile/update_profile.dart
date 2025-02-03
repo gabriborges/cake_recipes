@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpdateProfilePage extends StatelessWidget {
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController _profileController = Get.find();
   final TextEditingController _nameController = TextEditingController();
 
   @override

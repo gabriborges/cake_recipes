@@ -11,7 +11,6 @@ class RecipePage extends StatelessWidget {
     final Map<String, dynamic> recipe =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    // Increment views when the recipe is opened
     _recipesController.incrementViews(recipe['id']);
 
     return CakeRecipeDetails(
@@ -25,7 +24,7 @@ class RecipePage extends StatelessWidget {
       preparation: recipe['preparation_method'] ?? '',
       moreInfo: recipe['more_info'] ?? '',
       recipeId: recipe['id'],
-      rating: recipe['rating'].toDouble() ?? 0,
+      rating: recipe['rating']?.toDouble() ?? 0,
       views: recipe['views'] ?? 0,
     );
   }
