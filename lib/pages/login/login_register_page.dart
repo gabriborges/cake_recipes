@@ -107,6 +107,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       onPressed:
           isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
       style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red[400],
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -114,7 +115,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       ),
       child: Text(
         isLogin ? 'Entrar' : 'Registrar',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(fontSize: 18, color: Colors.white),
       ),
     );
   }
@@ -129,7 +130,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
       },
       child: Text(
         isLogin ? 'Registrar' : 'Entrar',
-        style: TextStyle(color: Colors.blue),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

@@ -38,6 +38,7 @@ class ProfileController extends GetxController {
         userReviews.value = userDoc['reviews'];
         userViews.value = userDoc['views'];
         userProfilePicture.value = userDoc['profile_pic'];
+        // isLoading.value = false;
         await updateUserReviews(userDoc['recipes']);
         await updateUserRating(userDoc['recipes']);
         await updateUserViews(userDoc['recipes']);

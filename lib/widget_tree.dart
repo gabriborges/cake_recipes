@@ -19,7 +19,7 @@ class _WidgetTreeState extends State<WidgetTree> {
     super.initState();
     Get.put(ProfileController());
     Get.put(FavoriteController());
-    Get.put(RecipesController());
+    // Get.put(RecipesController());
   }
 
   @override

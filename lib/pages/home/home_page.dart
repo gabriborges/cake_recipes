@@ -10,10 +10,10 @@ import 'package:get/get.dart';
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
-  final RecipesController _recipesController = Get.find();
+  RecipesController recipesController = Get.put(RecipesController());
 
   Future<void> _refreshRecipes() async {
-    await _recipesController.fetchRecipes();
+    await recipesController.fetchRecipes();
   }
 
   @override
@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   Obx(() {
-                    if (_recipesController.isLoading.value) {
+                    if (recipesController.isLoading.value) {
                       return Center(
                         child: SizedBox(
                           width: double.infinity,
@@ -81,9 +81,9 @@ class HomePage extends StatelessWidget {
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _recipesController.recipes.length,
+                      itemCount: recipesController.recipes.length,
                       itemBuilder: (context, index) {
-                        var recipe = _recipesController.recipes[index];
+                        var recipe = recipesController.recipes[index];
                         return CakeCard(
                           imageUrl: recipe['image_link'],
                           title: recipe['title'],

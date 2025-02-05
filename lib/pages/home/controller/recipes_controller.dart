@@ -1,5 +1,6 @@
 import 'package:cake_recipes/pages/profile/controller/profile_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RecipesController extends GetxController {
@@ -25,8 +26,9 @@ class RecipesController extends GetxController {
         return data;
       }).toList();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch recipes: $e',
-          snackPosition: SnackPosition.BOTTOM);
+      debugPrint('Failed to fetch recipes: $e');
+      // Get.snackbar('Error', 'Failed to fetch recipes: $e',
+      //     snackPosition: SnackPosition.BOTTOM);
     } finally {
       isLoading(false);
     }
